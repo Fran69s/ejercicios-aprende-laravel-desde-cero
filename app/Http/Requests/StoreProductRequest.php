@@ -24,9 +24,9 @@ class StoreProductRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required',
-            'description' => 'required',
-            'price' => 'required',
+            'name' => 'required|max:64',
+            'description' => 'required|max:512',
+            'price' => ['required','numeric','min:0.01'],
         ];
     }
 }

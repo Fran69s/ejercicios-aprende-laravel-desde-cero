@@ -15,7 +15,11 @@ class ProductController extends Controller
      */
     public function index()
     {
-        //
+        $products = auth()->user()->products;
+
+        return [
+            'products' => $products,
+        ];
     }
 
     /**
@@ -56,7 +60,9 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
-        //
+        return [
+            'product' => $product,
+        ];
     }
 
     /**
@@ -77,9 +83,18 @@ class ProductController extends Controller
      * @param  \App\Models\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Product $product)
+    public function update(StoreProductRequest $request, Product $product)
     {
-        //
+        $this->authorize('update', $product);
+
+        $data = $request->validated();
+
+        $product->update($data);
+
+        return [
+            'message' => 'Product updated successfully',
+            'product' => $product,
+        ];
     }
 
     /**
@@ -90,6 +105,13 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
-        //
+        $this->authorize('delete', $product);
+
+        $product->delete();
+
+        return [
+            'message' => 'Product deleted successfully',
+            'product' => $product,
+        ];
     }
 }
